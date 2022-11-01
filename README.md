@@ -2,7 +2,7 @@
 
 This project is currently fork of [Uniswap Subgraph V2](https://github.com/Uniswap/v2-subgraph).
 
-[FathomSwap](https://fathomswap.org/) is a decentralized protocol for automated token exchange on Ethereum.
+[FathomSwap](https://fathomswap.org/) is a decentralized protocol for automated token exchange on XDC.
 
 This subgraph dynamically tracks any pair created by the fathomswap factory. It tracks of the current state of FathomSwap contracts, and contains derived stats for things like historical data and USD prices.
 
@@ -24,7 +24,7 @@ Below are a few ways to show how to query the fathomswap-subgraph for data. The 
 
 #### FathomSwapFactory
 
-Contains data across all of FathomSwap V2. This entity tracks important things like total liquidity (in ETH and USD, see below), all time volume, transaction count, number of pairs and more.
+Contains data across all of FathomSwap. This entity tracks important things like total liquidity (in ETH and USD, see below), all time volume, transaction count, number of pairs and more.
 
 #### Token
 
