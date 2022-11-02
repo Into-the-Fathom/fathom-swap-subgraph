@@ -8,7 +8,7 @@ import { Factory as FactoryContract } from '../types/templates/Pair/Factory'
 import { TokenDefinition } from './tokenDefinition'
 
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
-export const FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
+export const FACTORY_ADDRESS = '0x69310bcBcC35b3d5C2b62C72E75dA68d58FDafC9'
 
 export let ZERO_BI = BigInt.fromI32(0)
 export let ONE_BI = BigInt.fromI32(1)
@@ -19,7 +19,22 @@ export let BI_18 = BigInt.fromI32(18)
 export let factoryContract = FactoryContract.bind(Address.fromString(FACTORY_ADDRESS))
 
 // rebass tokens, dont count in tracked volume
-export let UNTRACKED_PAIRS: string[] = ['0x9ea3b5b4ec044b70375236a281986106457b20ef']
+export let UNTRACKED_PAIRS: string[] = [
+  '0xf85484f334929a258baeb6121f073b1470c430bd',
+  '0xd741f14eb076feab2124b81ce56655b5d6c93ad9',
+  '0xea66333ede83daf4f90ed0863817fea7d60db796',
+  '0xd1d426a420eaf98ae4a4f98906d7faf559631b20',
+  '0xc1ed773864931ab2f19e41ad45b39756d3c3c4cb',
+  '0xbdc865ae3dc930c1c8220291887aead6931addfd',
+  '0xa7857bb47d46db4b7ad449e0b3fe4fa40d93d884',
+  '0x9ab0343cba68440518e408aef71c58de8a60a895',
+  '0x8e0ba61db9eeaf57fcf50475444eec93249d1533',
+  '0x884955287bebdaf41d0264e39b40cfdb064a18d2',
+  '0x71b0a7bd532f2615bf4733ac3ccd133861d8da4d',
+  '0xaf23e77566298ee5442cdf10a66f32efc00fb44b',
+  '0x67d0975398624bca4a0ec8e3e9d895bccf92fb4b',
+  '0x537fe68212e7a8b2b73ac4cb784ac25838774bec',
+]
 
 export function exponentToBigDecimal(decimals: BigInt): BigDecimal {
   let bd = BigDecimal.fromString('1')
