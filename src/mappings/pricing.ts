@@ -20,7 +20,7 @@ export function getEthPriceInUSD(): BigDecimal {
 let WHITELIST: string[] = [
   '0xe99500ab4a413164da49af83b9824749059b46ce', // WETH
   '0xe81e44165c179F958399127277E1FB3D00256E6f', // FTHM 
-  '0x2db58E5850f4F9BA63ff4306Cf1F6426C7a6B9b7', // FXD 
+  '0x8909877dc651f170bd65d693afa7e2b0091588be', // FXD 
   '0x82b4334f5cd8385f55969bae0a863a0c6ea9f63f', // US+ 
 ]
 
