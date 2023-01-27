@@ -4,16 +4,17 @@
   "repository": "https://github.com/graphprotocol/fathomswap-v2-subgraph",
   "license": "GPL-3.0-or-later",
   "scripts": {
+    "clean": "rm -rf build/ generated/ config/addresses.ts config/generatedAddresses.json subgraph.yaml",
     "codegen": "graph codegen --output-dir src/types/",
     "build": "graph build",
     
-    "create-local": "graph create fathom/fathomswap --node http://127.0.0.1:8020",
-    "remove-local": "graph remove fathom/fathomswap --node http://127.0.0.1:8020",
-    "deploy-local": "graph deploy fathom/fathomswap --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "create:local": "graph create --node http://localhost:8020/ fathom/fathomswap subgraph.yaml",
+    "remove:local": "graph remove --node http://localhost:8020/ fathom/fathomswap subgraph.yaml",
+    "deploy:local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 --version-label v0.0.1 fathom/fathomswap subgraph.yaml",
 
-    "create-do": "graph create fathom/fathomswap --node http://graph.composer.live:8020",
-    "remove-do": "graph remove fathom/fathomswap --node http://graph.composer.live:8020",
-    "deploy-do": "graph deploy fathom/fathomswap --node http://graph.composer.live:8020 --ipfs http://graph.composer.live:5001",
+    "prep:addresses:apothem": "ts-node config/apothemAddressScript.ts && mustache ./config/generatedAddresses.json ./config/addresses.template.ts > ./config/addresses.ts",
+    "prep:apothem": "yarn clean && yarn prep:addresses:apothem && mustache ./config/generatedAddresses.json subgraph.template.yaml > subgraph.yaml && graph codegen && graph build",
+    
 
     "watch-local": "graph deploy fathom/fathomswap --watch --debug --node http://127.0.0.1:8020/ --ipfs http://localhost:5001"
   },
@@ -22,6 +23,8 @@
     "@graphprotocol/graph-ts": "^0.16.0",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
+    "@types/node": "^14.0.13",
+    "mustache": "^4.2.0",
     "eslint": "^6.2.2",
     "eslint-config-prettier": "^6.1.0",
     "prettier": "^1.18.2",
