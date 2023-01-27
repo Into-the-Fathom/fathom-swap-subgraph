@@ -4,7 +4,7 @@
   "repository": "https://github.com/graphprotocol/fathomswap-v2-subgraph",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "clean": "rm -rf build/ generated/ config/addresses.ts config/generatedAddresses.json subgraph.yaml",
+    "clean": "rm -rf build/ generated/ config/addresses.ts config/generatedAddresses.json subgraph.yaml src/types/*",
     "codegen": "graph codegen --output-dir src/types/",
     "build": "graph build",
     
@@ -13,7 +13,7 @@
     "deploy:local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 --version-label v0.0.1 fathom/fathomswap subgraph.yaml",
 
     "prep:addresses:apothem": "ts-node config/apothemAddressScript.ts && mustache ./config/generatedAddresses.json ./config/addresses.template.ts > ./config/addresses.ts",
-    "prep:apothem": "yarn clean && yarn prep:addresses:apothem && mustache ./config/generatedAddresses.json subgraph.template.yaml > subgraph.yaml && graph codegen && graph build",
+    "prep:apothem": "yarn clean && yarn prep:addresses:apothem && mustache ./config/generatedAddresses.json subgraph.template.yaml > subgraph.yaml && yarn codegen && graph build",
     
 
     "watch-local": "graph deploy fathom/fathomswap --watch --debug --node http://127.0.0.1:8020/ --ipfs http://localhost:5001"
