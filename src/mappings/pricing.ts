@@ -19,7 +19,7 @@ export function getEthPriceInUSD(): BigDecimal {
 // token where amounts should contribute to tracked volume and liquidity
 let WHITELIST: string[] = [
   '0xe99500ab4a413164da49af83b9824749059b46ce', // WETH
-  '0xce156cacb8a3c84ef08b1528296fde20782fd82c', // FTHM 
+  '0xc3047f0df34216860448d848f3419cdcf73c6165', // FTHM 
   '0x08b5860dad9947677f2a9d7de563cbec9980e44c', // FXD 
   '0x82b4334f5cd8385f55969bae0a863a0c6ea9f63f', // USD 
 ]
