@@ -7,6 +7,11 @@
     "clean": "rm -rf build/ generated/ config/addresses.ts config/generatedAddresses.json subgraph.yaml src/types/*",
     "codegen": "graph codegen --output-dir src/types/",
     "build": "graph build",
+
+
+    "create:dev": "graph create --node http://159.223.112.169:8020/ dex-subgraph",
+    "remove:dev": "graph remove --node http://159.223.112.169:8020/ dex-subgraph",
+    "deploy:dev": "graph deploy --node http://159.223.112.169:8020/ --ipfs http://159.223.112.169:5001 dex-subgraph",
     
     "create:local": "graph create --node http://localhost:8020/ dex-subgraph subgraph.yaml",
     "remove:local": "graph remove --node http://localhost:8020/ dex-subgraph subgraph.yaml",

@@ -35,6 +35,9 @@ export let UNTRACKED_PAIRS: string[] = [
   '0xaf23e77566298ee5442cdf10a66f32efc00fb44b',
   '0x67d0975398624bca4a0ec8e3e9d895bccf92fb4b',
   '0x537fe68212e7a8b2b73ac4cb784ac25838774bec',
+  '0x725946db6ad6828a683ef8238237d7f3a75658e3',
+  '0x9b9c6a75888778448a8d17ed5ea928b2069482e4',
+  '0xcf31878d1105e6e6f59399efd9010c432d9d3736',
 ]
 
 export function exponentToBigDecimal(decimals: BigInt): BigDecimal {
