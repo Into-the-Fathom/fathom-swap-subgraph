@@ -4,7 +4,7 @@ import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts/index'
 import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD, UNTRACKED_PAIRS } from './helpers'
 
 const WETH_ADDRESS = '0xe99500ab4a413164da49af83b9824749059b46ce'
-const USDT_WETH_PAIR = '0x1fb52c9b72a976ed810683b2d718b8461696bc79' 
+const USDT_WETH_PAIR = '0x2e12c16413150d64e380c14cb6021c1ca38b25b6' 
 
 export function getEthPriceInUSD(): BigDecimal {
   let usdtPair = Pair.load(USDT_WETH_PAIR) // usdt is token0
@@ -19,9 +19,9 @@ export function getEthPriceInUSD(): BigDecimal {
 // token where amounts should contribute to tracked volume and liquidity
 let WHITELIST: string[] = [
   '0xe99500ab4a413164da49af83b9824749059b46ce', // WETH
-  '0xd033b52657f3580092914e1976715e0cbc622855', // FTHM 
-  '0x603b972d894bf754b63103ecb4b70b024096451d', // FXD 
-  '0x82b4334F5CD8385f55969BAE0A863a0C6eA9F63f', // USD 
+  '0xD033b52657F3580092914e1976715e0cbC622855', // FTHM 
+  '0x603B972D894bF754B63103ECB4b70b024096451D', // FXD 
+  '0x82b4334f5cd8385f55969bae0a863a0c6ea9f63f', // USD 
 ]
 
 // minimum liquidity required to count towards tracked volume for pairs with small # of Lps
