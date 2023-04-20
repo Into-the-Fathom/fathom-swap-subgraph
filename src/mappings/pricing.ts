@@ -4,7 +4,7 @@ import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts/index'
 import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD, UNTRACKED_PAIRS } from './helpers'
 
 const WETH_ADDRESS = '0xe99500ab4a413164da49af83b9824749059b46ce'
-const USDT_WETH_PAIR = '0x56ef3ac9b4ba32683def994d640f3753ad1f808d' 
+const USDT_WETH_PAIR = '0x8c9401a5bc0d482030d1fdd78d65df692e5c1adf' 
 
 export function getEthPriceInUSD(): BigDecimal {
   let usdtPair = Pair.load(USDT_WETH_PAIR) // usdt is token0
@@ -19,8 +19,8 @@ export function getEthPriceInUSD(): BigDecimal {
 // token where amounts should contribute to tracked volume and liquidity
 let WHITELIST: string[] = [
   '0xe99500ab4a413164da49af83b9824749059b46ce', // WETH
-  '0xfbf03b959b9836ac1cC13a8B30f228056dBa7b9a', // FTHM 
-  '0xCBB5e38427F102Fdb08d76Bb592e85d454A31d05', // FXD 
+  '0x0Cc79883b6FF52B857bDA7D5Df9214eE0bb28839', // FTHM 
+  '0xf31146956Cb3be9EFD6Cfd665Cb4Cb5Aeeb5cA3e', // FXD 
   '0x82b4334f5cd8385f55969bae0a863a0c6ea9f63f', // USD 
 ]
 
