@@ -3,14 +3,14 @@ import { Pair, Token, Bundle } from '../types/schema'
 import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts/index'
 import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD, UNTRACKED_PAIRS } from './helpers'
 
-const WETH_ADDRESS = '0xcec1609efd3f12d0da63250ef6761a7482dda3bf'
-const USDT_WETH_PAIR = '0x1fa11a81a09f89df7ae2a8f0e846b3a3a2706bc9' // created block 10093341
+const WETH_ADDRESS = '0x951857744785e80e2de051c32ee7b25f9c458c42'
+const USDT_WETH_PAIR = '0xfcabba53dac7b6b19714c7d741a46f6dad260107'
 
 export function getEthPriceInUSD(): BigDecimal {
-  let usdtPair = Pair.load(USDT_WETH_PAIR) // usdt is token0
+  let usdtPair = Pair.load(USDT_WETH_PAIR) // usdt is token1 
 
   if (usdtPair !== null) {
-    return usdtPair.token0Price
+    return usdtPair.token1Price
   } else {
     return ZERO_BD
   }
@@ -18,10 +18,10 @@ export function getEthPriceInUSD(): BigDecimal {
 
 // token where amounts should contribute to tracked volume and liquidity
 let WHITELIST: string[] = [
-  '0xcec1609efd3f12d0da63250ef6761a7482dda3bf', // WETH
-  '0x4c52500DdC18EE0C6CB6155961347076E43ABb99', // FTHM 
-  '0x32333d7d5aE3Ea3bee41618838842EdA5581576c', // FXD 
-  '0xccdc0653935a251b6839f30359917977f994b5d9', // USDT 
+  '0x951857744785e80e2de051c32ee7b25f9c458c42', // WETH
+  '0x3279dBEfABF3C6ac29d7ff24A6c46645f3F4403c', // FTHM 
+  '0x49d3f7543335cf38Fa10889CCFF10207e22110B5', // FXD 
+  '0xD4B5f10D61916Bd6E0860144a91Ac658dE8a1437', // USD 
 ]
 
 // minimum liquidity required to count towards tracked volume for pairs with small # of Lps
