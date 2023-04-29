@@ -16,6 +16,10 @@
     "prep:apothem": "yarn clean && yarn prep:addresses:apothem && mustache ./config/generatedAddresses.json subgraph.template.yaml > subgraph.yaml && yarn codegen && graph build",
     
 
+    "prep:addresses:xinfin": "ts-node config/xinfinAddressScript.ts && mustache ./config/generatedAddresses.json ./config/addresses.template.ts > ./config/addresses.ts",
+    "prep:xinfin": "yarn clean && yarn prep:addresses:xinfin && mustache ./config/generatedAddresses.json subgraph.template.yaml > subgraph.yaml && yarn codegen && graph build",
+    
+
     "watch-local": "graph deploy fathom/fathomswap --watch --debug --node http://127.0.0.1:8020/ --ipfs http://localhost:5001"
   },
   "devDependencies": {
