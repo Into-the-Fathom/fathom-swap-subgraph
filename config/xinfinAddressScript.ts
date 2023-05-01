@@ -17,7 +17,7 @@ export let addresses: Addresses = {
 const main = (): void => {
   try {
     let output = JSON.parse(mustache.render(JSON.stringify(addresses), renameAddresses))
-    output.blockNumber = '59156995' // Block to start indexing from
+    output.blockNumber = '59000000'  // Block to start indexing from
     output.network = 'xinfin'
     fs.writeFileSync(__dirname + '/generatedAddresses.json', JSON.stringify(output, null, 2))
   } catch (e) {
