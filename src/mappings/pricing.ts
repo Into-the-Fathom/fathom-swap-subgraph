@@ -20,8 +20,8 @@ export function getEthPriceInUSD(): BigDecimal {
 let WHITELIST: string[] = [
   '0x951857744785e80e2de051c32ee7b25f9c458c42', // WETH
   '0x3279dBEfABF3C6ac29d7ff24A6c46645f3F4403c', // FTHM 
-  '0x49d3f7543335cf38Fa10889CCFF10207e22110B5', // FXD 
-  '0xD4B5f10D61916Bd6E0860144a91Ac658dE8a1437', // USD 
+  '0x49d3f7543335cf38fa10889ccff10207e22110b5', // FXD 
+  '0xd4b5f10d61916bd6e0860144a91ac658de8a1437', // USD 
 ]
 
 // minimum liquidity required to count towards tracked volume for pairs with small # of Lps
