@@ -10,6 +10,7 @@ import { addresses } from '../../config/addresses'
 
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
 export let FACTORY_ADDRESS = addresses.Factory;
+export let FARM_ADDRESS = addresses.Farm;
 
 export let ZERO_BI = BigInt.fromI32(0)
 export let ONE_BI = BigInt.fromI32(1)

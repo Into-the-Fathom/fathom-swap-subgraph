@@ -20,6 +20,40 @@ type FathomSwapFactory @entity {
   txCount: BigInt!
 }
 
+type LpPool @entity {
+  # ID
+  id: ID!
+
+  # lp token
+  lpToken: Token!
+
+  # reward allocation
+  allocPoint: BigInt!
+
+  # last block reward was updated
+  lastRewardBlock: BigInt!
+
+  # accumulated reward per share
+  accRewardPerShare: BigInt!
+}
+
+type LpStake @entity {
+  # ID
+  id: ID!
+
+  # lp token
+  lpToken: Token!
+
+  # user
+  user: User!
+
+  # stake amount
+  amount: BigInt!
+
+  # reward paid
+  rewardPaid: BigInt!
+}
+
 type Token @entity {
   # token address
   id: ID!

@@ -10,6 +10,7 @@ renameAddresses['apothem'] = networkAddresses['51']
 
 export let addresses: Addresses = {
   Factory: '{{apothem.Factory}}',
+  Farm: '{{apothem.Farm}}',
   blockNumber: '',
   network: '',
 }
