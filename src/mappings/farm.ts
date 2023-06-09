@@ -46,6 +46,7 @@ export function handleNewPool(event: LogPoolAdded): void {
     pool.accRewardPerShare = ZERO_BI;
     pool.lpToken = event.params.lpToken.toHexString();
     pool.lastRewardBlock = event.block.number;
+    pool.liquidity = ZERO_BI;
 
     pool.save();
   } else {
@@ -77,6 +78,14 @@ export function handlePoolRewardUpdate(event: LogPoolRewardUpdate): void {
 export function handleDeposit(event: LogDeposit): void {
   let id = event.params.lpToken.toHexString().concat("-").concat(event.params.user.toHexString());
 
+  let pool = LpPool.load(event.params.lpToken.toHexString())
+  if (pool === null) {
+    log.info('Pool with id {} not Found', [event.params.lpToken.toHexString()])
+    return;
+  }
+
+  pool.liquidity = pool.liquidity.plus(event.params.amount);
+
   let stake = LpStake.load(id);
   if (stake === null) {
     stake = new LpStake(id);
@@ -88,11 +97,19 @@ export function handleDeposit(event: LogDeposit): void {
     stake.amount = stake.amount.plus(event.params.amount);
   }
 
+  pool.save();
   stake.save();
 }
 
 export function handleWithdraw(event: LogWithdraw): void {
   let id = event.params.lpToken.toHexString().concat("-").concat(event.params.user.toHexString());
+
+  let pool = LpPool.load(event.params.lpToken.toHexString())
+  if (pool === null) {
+    log.info('Pool with id {} not Found', [event.params.lpToken.toHexString()])
+    return;
+  }
+
 
   let stake = LpStake.load(id);
   if (stake === null) {
@@ -101,6 +118,10 @@ export function handleWithdraw(event: LogWithdraw): void {
     stake.amount = stake.amount.minus(event.params.amount);
     stake.save();
   }
+
+  pool.liquidity = pool.liquidity.minus(event.params.amount);
+  pool.save();
+
 }
 
 

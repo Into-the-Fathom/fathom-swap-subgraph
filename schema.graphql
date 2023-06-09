@@ -33,6 +33,10 @@ type LpPool @entity {
   # last block reward was updated
   lastRewardBlock: BigInt!
 
+
+  # liquidity
+  liquidity: BigInt!
+
   # accumulated reward per share
   accRewardPerShare: BigInt!
 }
