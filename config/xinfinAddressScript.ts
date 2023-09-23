@@ -7,12 +7,12 @@ import { Addresses } from './addresses.template'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 let renameAddresses: any = networkAddresses
-renameAddresses['apothem'] = networkAddresses['51'][process.argv[2]]["addresses"]
+renameAddresses['xinfin'] = networkAddresses['50'][process.argv[2]]["addresses"]
 
 export let addresses: Addresses = {
-  Factory: '{{apothem.Factory}}',
-  blockNumber: networkAddresses['51'][process.argv[2]]["blockNumber"],
-  network:  networkAddresses['51']["network"],
+  Factory: '{{xinfin.Factory}}',
+  blockNumber: networkAddresses['50'][process.argv[2]]["blockNumber"],
+  network:  networkAddresses['50']["network"],
 }
 
 const main = (): void => {

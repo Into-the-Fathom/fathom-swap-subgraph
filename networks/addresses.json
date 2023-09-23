@@ -1,5 +1,25 @@
 {
+  "50": {
+      "xinfin":{
+          "addresses": {
+            "Factory": "0x9fAb572F75008A42c6aF80b36Ab20C76a38ABc4B"
+          },
+          "blockNumber":"59776353"    
+      }
+  },
   "51": {
-    "Factory": "0xa7bf3E5eDbC8d37584218778cd6A1EDe91Bf201D"
+      "dev":{
+          "addresses": {
+            "Factory": "0xa7bf3E5eDbC8d37584218778cd6A1EDe91Bf201D"
+          },
+          "blockNumber":"47796918"
+      },
+      "qa":{
+          "addresses": {
+            "Factory": "0xa7bf3E5eDbC8d37584218778cd6A1EDe91Bf201D"
+          },
+          "blockNumber":"47796918"
+      },
+      "network":"apothem"
   }
 }
