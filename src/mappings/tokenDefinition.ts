@@ -18,6 +18,9 @@ export class TokenDefinition {
     this.decimals = decimals
   }
 
+  // @todo make all static definitions aligned with the ones in the network
+
+
   // Get all tokens with a static defintion
   static getStaticDefinitions(): Array<TokenDefinition> {
     let staticDefinitions = new Array<TokenDefinition>(6)

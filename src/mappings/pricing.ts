@@ -1,10 +1,11 @@
 /* eslint-disable prefer-const */
-import { Pair, Token, Bundle } from '../types/schema'
+import { Pair, Token, Bundle } from '../../generated/schema'
 import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts/index'
 import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD, UNTRACKED_PAIRS } from './helpers'
 
+// @todo update to be fetched from config
 const WETH_ADDRESS = '0xe99500ab4a413164da49af83b9824749059b46ce'
-const USDT_WETH_PAIR = '0x56ef3ac9b4ba32683def994d640f3753ad1f808d' 
+const USDT_WETH_PAIR = '0x8c9401a5bc0d482030d1fdd78d65df692e5c1adf' 
 
 export function getEthPriceInUSD(): BigDecimal {
   let usdtPair = Pair.load(USDT_WETH_PAIR) // usdt is token0
@@ -17,19 +18,27 @@ export function getEthPriceInUSD(): BigDecimal {
 }
 
 // token where amounts should contribute to tracked volume and liquidity
+// @todo update to be fetched from config
 let WHITELIST: string[] = [
   '0xe99500ab4a413164da49af83b9824749059b46ce', // WETH
+<<<<<<< HEAD
   '0xfbf03b959b9836ac1cC13a8B30f228056dBa7b9a', // FTHM 
   '0xDf29cB40Cb92a1b8E8337F542E3846E185DefF96', // FXD 
+=======
+  '0xAC1F73e53A5375FbdaCed159E078AE5e44ee0eCC', // FTHM 
+  '0x8E3D518785e5105C41558d184A71DFaF6A62d274', // FXD 
+>>>>>>> packages-updated-minor-refactoring
   '0x82b4334f5cd8385f55969bae0a863a0c6ea9f63f', // USD 
 ]
 
 // minimum liquidity required to count towards tracked volume for pairs with small # of Lps
 // let MINIMUM_USD_THRESHOLD_NEW_PAIRS = BigDecimal.fromString('400000')
+// @todo update to be not zero
 let MINIMUM_USD_THRESHOLD_NEW_PAIRS = BigDecimal.fromString('0')
 
 // minimum liquidity for price to get tracked
 // let MINIMUM_LIQUIDITY_THRESHOLD_ETH = BigDecimal.fromString('2')
+// @todo update to be not zero
 let MINIMUM_LIQUIDITY_THRESHOLD_ETH = BigDecimal.fromString('0')
 
 /**
@@ -81,6 +90,8 @@ export function getTrackedVolumeUSD(
   }
 
   // if less than 5 LPs, require high minimum reserve amount amount or return 0
+  // if (pair.liquidityProviderCount.lt(BigInt.fromI32(5))) {
+  // @todo update to be not zero
   if (pair.liquidityProviderCount.lt(BigInt.fromI32(0))) {
     let reserve0USD = pair.reserve0.times(price0)
     let reserve1USD = pair.reserve1.times(price1)

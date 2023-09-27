@@ -2,7 +2,7 @@
 
 This project is currently fork of [Uniswap Subgraph V2](https://github.com/Uniswap/v2-subgraph).
 
-[FathomSwap](https://fathomswap.org/) is a decentralized protocol for automated token exchange on XDC.
+[Fathom Swap](https://swap.fathom.fi/) is a decentralized protocol for automated token exchange on XDC.
 
 This subgraph dynamically tracks any pair created by the fathomswap factory. It tracks of the current state of FathomSwap contracts, and contains derived stats for things like historical data and USD prices.
 
@@ -46,11 +46,11 @@ These contain specifc information about a transaction. Things like which pair tr
 
 ### Querying Aggregated FathomSwap Data
 
-This query fetches aggredated data from all fathomswap pairs and tokens, to give a view into how much activity is happening within the whole protocol.
+This query fetches aggredated data from all Fathom Swap pairs and tokens, to give a view into how much activity is happening within the whole protocol.
 
 ```graphql
 {
-  fathomswapFactories(first: 1) {
+  fathomSwapFactories(first: 1) {
     pairCount
     totalVolumeUSD
     totalLiquidityUSD

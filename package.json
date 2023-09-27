@@ -4,35 +4,31 @@
   "repository": "https://github.com/graphprotocol/fathomswap-v2-subgraph",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "clean": "rm -rf build/ generated/ config/addresses.ts config/generatedAddresses.json subgraph.yaml src/types/*",
-    "codegen": "graph codegen --output-dir src/types/",
+    "clean": "rm -rf build/ generated/ config/addresses.ts config/generatedAddresses.json subgraph.yaml",
+    "codegen": "graph codegen",
     "build": "graph build",
+    "test": "graph test",
 
-
-    "create:dev": "graph create --node http://159.223.112.169:8020/ dex-subgraph",
-    "remove:dev": "graph remove --node http://159.223.112.169:8020/ dex-subgraph",
-    "deploy:dev": "graph deploy --node http://159.223.112.169:8020/ --ipfs http://159.223.112.169:5001 dex-subgraph",
-    
     "create:local": "graph create --node http://localhost:8020/ dex-subgraph subgraph.yaml",
     "remove:local": "graph remove --node http://localhost:8020/ dex-subgraph subgraph.yaml",
-    "deploy:local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 dex-subgraph subgraph.yaml",
+    "deploy:local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001  dex-subgraph subgraph.yaml",
 
-    "prep:addresses:apothem": "ts-node config/apothemAddressScript.ts && mustache ./config/generatedAddresses.json ./config/addresses.template.ts > ./config/addresses.ts",
-    "prep:apothem": "yarn clean && yarn prep:addresses:apothem && mustache ./config/generatedAddresses.json subgraph.template.yaml > subgraph.yaml && yarn codegen && graph build",
-    
+    "prep:addresses:apothem:dev": "ts-node config/apothemAddressScript.ts dev && mustache ./config/generatedAddresses.json ./config/addresses.template.ts > ./config/addresses.ts",
+    "prep:apothem:dev": "yarn clean && yarn prep:addresses:apothem:dev && mustache ./config/generatedAddresses.json subgraph.template.yaml > subgraph.yaml && graph codegen && graph build",
 
-    "watch-local": "graph deploy fathom/fathomswap --watch --debug --node http://127.0.0.1:8020/ --ipfs http://localhost:5001"
+    "prep:addresses:apothem:qa": "ts-node config/apothemAddressScript.ts qa && mustache ./config/generatedAddresses.json ./config/addresses.template.ts > ./config/addresses.ts",
+    "prep:apothem:qa": "yarn clean && yarn prep:addresses:apothem:qa && mustache ./config/generatedAddresses.json subgraph.template.yaml > subgraph.yaml && graph codegen && graph build",
+
+    "prep:addresses:xinfin:xinfin": "ts-node config/xinfinAddressScript.ts xinfin && mustache ./config/generatedAddresses.json ./config/addresses.template.ts > ./config/addresses.ts",
+    "prep:xinfin:xinfin": "yarn clean && yarn prep:addresses:xinfin:xinfin && mustache ./config/generatedAddresses.json subgraph.template.yaml > subgraph.yaml && graph codegen && graph build"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.20.0",
+    "@graphprotocol/graph-ts": "^0.20.0"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.16.0",
-    "@graphprotocol/graph-ts": "^0.16.0",
-    "@typescript-eslint/eslint-plugin": "^2.0.0",
-    "@typescript-eslint/parser": "^2.0.0",
-    "@types/node": "^14.0.13",
-    "mustache": "^4.2.0",
-    "eslint": "^6.2.2",
-    "eslint-config-prettier": "^6.1.0",
-    "prettier": "^1.18.2",
-    "typescript": "^3.5.2"
+     "mustache": "^4.2.0",
+     "@types/node": "^14.0.13",
+     "typescript": "^3.9.3"
   }
 }

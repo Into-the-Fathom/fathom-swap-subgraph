@@ -1,10 +1,10 @@
 /* eslint-disable prefer-const */
-import { log, BigInt, BigDecimal, Address, EthereumEvent } from '@graphprotocol/graph-ts'
-import { ERC20 } from '../types/Factory/ERC20'
-import { ERC20SymbolBytes } from '../types/Factory/ERC20SymbolBytes'
-import { ERC20NameBytes } from '../types/Factory/ERC20NameBytes'
-import { User, Bundle, Token, LiquidityPosition, LiquidityPositionSnapshot, Pair } from '../types/schema'
-import { Factory as FactoryContract } from '../types/templates/Pair/Factory'
+import { log, BigInt, BigDecimal, Address, ethereum } from '@graphprotocol/graph-ts'
+import { ERC20 } from '../../generated/Factory/ERC20'
+import { ERC20SymbolBytes } from '../../generated/Factory/ERC20SymbolBytes'
+import { ERC20NameBytes } from '../../generated/Factory/ERC20NameBytes'
+import { User, Bundle, Token, LiquidityPosition, LiquidityPositionSnapshot, Pair } from '../../generated/schema'
+import { Factory as FactoryContract } from '../../generated/templates/Pair/Factory'
 import { TokenDefinition } from './tokenDefinition'
 import { addresses } from '../../config/addresses'
 
@@ -61,7 +61,7 @@ export function isNullEthValue(value: string): boolean {
 export function fetchTokenSymbol(tokenAddress: Address): string {
   // static definitions overrides
   let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
-  if(staticDefinition != null) {
+  if (staticDefinition != null) {
     return (staticDefinition as TokenDefinition).symbol
   }
 
@@ -89,7 +89,7 @@ export function fetchTokenSymbol(tokenAddress: Address): string {
 export function fetchTokenName(tokenAddress: Address): string {
   // static definitions overrides
   let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
-  if(staticDefinition != null) {
+  if (staticDefinition != null) {
     return (staticDefinition as TokenDefinition).name
   }
 
@@ -114,7 +114,17 @@ export function fetchTokenName(tokenAddress: Address): string {
   return nameValue
 }
 
+// HOT FIX: we cant implement try catch for overflow catching so skip total supply parsing on these tokens that overflow 
+// TODO: find better way to handle overflow 
+let SKIP_TOTAL_SUPPLY: string[] = [
+  "0x0000000000000000000000000000000000000000"
+]
+
 export function fetchTokenTotalSupply(tokenAddress: Address): BigInt {
+  if (SKIP_TOTAL_SUPPLY.includes(tokenAddress.toHexString())) {
+    return BigInt.fromI32(0)
+  }
+
   let contract = ERC20.bind(tokenAddress)
   let totalSupplyValue = null
   let totalSupplyResult = contract.try_totalSupply()
@@ -127,7 +137,7 @@ export function fetchTokenTotalSupply(tokenAddress: Address): BigInt {
 export function fetchTokenDecimals(tokenAddress: Address): BigInt {
   // static definitions overrides
   let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
-  if(staticDefinition != null) {
+  if (staticDefinition != null) {
     return (staticDefinition as TokenDefinition).decimals
   }
 
@@ -170,7 +180,7 @@ export function createUser(address: Address): void {
   }
 }
 
-export function createLiquiditySnapshot(position: LiquidityPosition, event: EthereumEvent): void {
+export function createLiquiditySnapshot(position: LiquidityPosition, event: ethereum.Event): void {
   let timestamp = event.block.timestamp.toI32()
   let bundle = Bundle.load('1')
   let pair = Pair.load(position.pair)
