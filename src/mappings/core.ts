@@ -3,12 +3,10 @@ import { BigInt, BigDecimal, store, Address } from '@graphprotocol/graph-ts'
 import {
   Pair,
   Token,
-  FathomSwapFactory,
   Transaction,
   Mint as MintEvent,
   Burn as BurnEvent,
   Swap as SwapEvent,
-  Bundle
 } from '../types/schema'
 import { Pair as PairContract, Mint, Burn, Swap, Transfer, Sync } from '../types/templates/Pair/Pair'
 import { updatePairDayData, updateTokenDayData, updateFathomSwapDayData, updatePairHourData } from './dayUpdates'
@@ -16,17 +14,24 @@ import { getEthPriceInUSD, findEthPerToken, getTrackedVolumeUSD, getTrackedLiqui
 import {
   convertTokenToDecimal,
   ADDRESS_ZERO,
-  FACTORY_ADDRESS,
   ONE_BI,
   createUser,
   createLiquidityPosition,
   ZERO_BD,
   BI_18,
-  createLiquiditySnapshot
+  createLiquiditySnapshot,
+  loadBundle1, 
+  loadPair, 
+  loadFactory,
+  loadToken,
+  loadMint,
+  loadBurn,
+  loadTransaction
 } from './helpers'
 
 function isCompleteMint(mintId: string): boolean {
-  return MintEvent.load(mintId).sender !== null // sufficient checks
+  let mint = loadMint(mintId);
+  return mint.sender !== null // sufficient checks
 }
 
 export function handleTransfer(event: Transfer): void {
@@ -35,7 +40,7 @@ export function handleTransfer(event: Transfer): void {
     return
   }
 
-  let factory = FathomSwapFactory.load(FACTORY_ADDRESS)
+  let factory = loadFactory();
   let transactionHash = event.transaction.hash.toHexString()
 
   // user stats
@@ -45,7 +50,7 @@ export function handleTransfer(event: Transfer): void {
   createUser(to)
 
   // get pair and load contract
-  let pair = Pair.load(event.address.toHexString())
+  let pair = loadPair(event.address.toHexString())
   let pairContract = PairContract.bind(event.address)
 
   // liquidity token amount being transfered
@@ -129,7 +134,7 @@ export function handleTransfer(event: Transfer): void {
     let burns = transaction.burns
     let burn: BurnEvent
     if (burns.length > 0) {
-      let currentBurn = BurnEvent.load(burns[burns.length - 1])
+      let currentBurn = loadBurn(burns[burns.length - 1]);
       if (currentBurn.needsComplete) {
         burn = currentBurn as BurnEvent
       } else {
@@ -163,7 +168,7 @@ export function handleTransfer(event: Transfer): void {
 
     // if this logical burn included a fee mint, account for this
     if (mints.length !== 0 && !isCompleteMint(mints[mints.length - 1])) {
-      let mint = MintEvent.load(mints[mints.length - 1])
+      let mint = loadMint(mints[mints.length - 1]);
       burn.feeTo = mint.to
       burn.feeLiquidity = mint.liquidity
       // remove the logical mint
@@ -211,10 +216,10 @@ export function handleTransfer(event: Transfer): void {
 }
 
 export function handleSync(event: Sync): void {
-  let pair = Pair.load(event.address.toHex())
-  let token0 = Token.load(pair.token0)
-  let token1 = Token.load(pair.token1)
-  let fathomswap = FathomSwapFactory.load(FACTORY_ADDRESS)
+  let pair = loadPair(event.address.toHex())
+  let token0 = loadToken(pair.token0)
+  let token1 = loadToken(pair.token1)
+  let fathomswap = loadFactory();
 
   // reset factory liquidity by subtracting onluy tarcked liquidity
   fathomswap.totalLiquidityETH = fathomswap.totalLiquidityETH.minus(pair.trackedReserveETH as BigDecimal)
@@ -234,7 +239,7 @@ export function handleSync(event: Sync): void {
   pair.save()
 
   // update ETH price now that reserves could have changed
-  let bundle = Bundle.load('1')
+  let bundle = loadBundle1();
   bundle.ethPrice = getEthPriceInUSD()
   bundle.save()
 
@@ -276,15 +281,14 @@ export function handleSync(event: Sync): void {
 }
 
 export function handleMint(event: Mint): void {
-  let transaction = Transaction.load(event.transaction.hash.toHexString())
+  let transaction = loadTransaction(event.transaction.hash.toHexString())
   let mints = transaction.mints
-  let mint = MintEvent.load(mints[mints.length - 1])
+  let mint = loadMint(mints[mints.length - 1])
+  let pair = loadPair(event.address.toHex())
+  let fathomswap = loadFactory();
 
-  let pair = Pair.load(event.address.toHex())
-  let fathomswap = FathomSwapFactory.load(FACTORY_ADDRESS)
-
-  let token0 = Token.load(pair.token0)
-  let token1 = Token.load(pair.token1)
+  let token0 = loadToken(pair.token0)
+  let token1 = loadToken(pair.token1)
 
   // update exchange info (except balances, sync will cover that)
   let token0Amount = convertTokenToDecimal(event.params.amount0, token0.decimals)
@@ -295,7 +299,7 @@ export function handleMint(event: Mint): void {
   token1.txCount = token1.txCount.plus(ONE_BI)
 
   // get new amounts of USD and ETH for tracking
-  let bundle = Bundle.load('1')
+  let bundle = loadBundle1();
   let amountTotalUSD = token1.derivedETH
     .times(token1Amount)
     .plus(token0.derivedETH.times(token0Amount))
@@ -319,7 +323,7 @@ export function handleMint(event: Mint): void {
   mint.save()
 
   // update the LP position
-  let liquidityPosition = createLiquidityPosition(event.address, mint.to as Address)
+  let liquidityPosition = createLiquidityPosition(event.address, Address.fromBytes(mint.to))
   createLiquiditySnapshot(liquidityPosition, event)
 
   // update day entities
@@ -331,22 +335,16 @@ export function handleMint(event: Mint): void {
 }
 
 export function handleBurn(event: Burn): void {
-  let transaction = Transaction.load(event.transaction.hash.toHexString())
-
-  // safety check
-  if (transaction === null) {
-    return
-  }
-
+  let transaction = loadTransaction(event.transaction.hash.toHexString())
   let burns = transaction.burns
-  let burn = BurnEvent.load(burns[burns.length - 1])
-
-  let pair = Pair.load(event.address.toHex())
-  let fathomswap = FathomSwapFactory.load(FACTORY_ADDRESS)
+  let burn = loadBurn(burns[burns.length - 1]);
+  let pair = loadPair(event.address.toHex())
+  let fathomswap = loadFactory();
 
   //update token info
-  let token0 = Token.load(pair.token0)
-  let token1 = Token.load(pair.token1)
+  let token0 = loadToken(pair.token0)
+  let token1 = loadToken(pair.token1)
+
   let token0Amount = convertTokenToDecimal(event.params.amount0, token0.decimals)
   let token1Amount = convertTokenToDecimal(event.params.amount1, token1.decimals)
 
@@ -355,7 +353,7 @@ export function handleBurn(event: Burn): void {
   token1.txCount = token1.txCount.plus(ONE_BI)
 
   // get new amounts of USD and ETH for tracking
-  let bundle = Bundle.load('1')
+  let bundle = loadBundle1();
   let amountTotalUSD = token1.derivedETH
     .times(token1Amount)
     .plus(token0.derivedETH.times(token0Amount))
@@ -381,7 +379,7 @@ export function handleBurn(event: Burn): void {
   burn.save()
 
   // update the LP position
-  let liquidityPosition = createLiquidityPosition(event.address, burn.sender as Address)
+  let liquidityPosition = createLiquidityPosition(event.address, Address.fromBytes(burn.sender))
   createLiquiditySnapshot(liquidityPosition, event)
 
   // update day entities
@@ -393,9 +391,10 @@ export function handleBurn(event: Burn): void {
 }
 
 export function handleSwap(event: Swap): void {
-  let pair = Pair.load(event.address.toHexString())
-  let token0 = Token.load(pair.token0)
-  let token1 = Token.load(pair.token1)
+  let pair = loadPair(event.address.toHexString())
+  let token0 = loadToken(pair.token0)
+  let token1 = loadToken(pair.token1)
+
   let amount0In = convertTokenToDecimal(event.params.amount0In, token0.decimals)
   let amount1In = convertTokenToDecimal(event.params.amount1In, token1.decimals)
   let amount0Out = convertTokenToDecimal(event.params.amount0Out, token0.decimals)
@@ -406,7 +405,7 @@ export function handleSwap(event: Swap): void {
   let amount1Total = amount1Out.plus(amount1In)
 
   // ETH/USD prices
-  let bundle = Bundle.load('1')
+  let bundle = loadBundle1();
 
   // get total amounts of derived USD and ETH for tracking
   let derivedAmountETH = token1.derivedETH
@@ -448,7 +447,7 @@ export function handleSwap(event: Swap): void {
   pair.save()
 
   // update global values, only used tracked amounts for volume
-  let fathomswap = FathomSwapFactory.load(FACTORY_ADDRESS)
+  let fathomswap = loadFactory();
   fathomswap.totalVolumeUSD = fathomswap.totalVolumeUSD.plus(trackedAmountUSD)
   fathomswap.totalVolumeETH = fathomswap.totalVolumeETH.plus(trackedAmountETH)
   fathomswap.untrackedVolumeUSD = fathomswap.untrackedVolumeUSD.plus(derivedAmountUSD)
