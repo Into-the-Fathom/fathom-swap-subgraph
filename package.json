@@ -16,11 +16,15 @@
     "remove:k8s": "graph remove --node http://graph-service:8020 dex-subgraph",
     "deploy:k8s": "graph deploy --node http://graph-service:8020 --ipfs http://ipfs-service:5001 --version-label v0.0.1 dex-subgraph",
 
+    "create:k8s:xinfin": "graph create --node http://xinfin-graph-node-service:8020/ dex-subgraph",
+    "remove:k8s:xinfin": "graph remove --node http://xinfin-graph-node-service:8020/ dex-subgraph",
+    "deploy:k8s:xinfin": "graph deploy --node http://xinfin-graph-node-service:8020/ --ipfs http://ipfs-service:5001 --version-label v0.0.1 dex-subgraph",
+
     "prep:addresses:apothem": "ts-node config/apothemAddressScript.ts && mustache ./config/generatedAddresses.json ./config/addresses.template.ts > ./config/addresses.ts",
     "prep:apothem:dev": "yarn clean && yarn prep:addresses:apothem && mustache ./config/generatedAddresses.json subgraph.template.yaml > subgraph.yaml && yarn codegen && graph build",
     
     "prep:addresses:xinfin": "ts-node config/xinfinAddressScript.ts && mustache ./config/generatedAddresses.json ./config/addresses.template.ts > ./config/addresses.ts",
-    "prep:xinfin:xinfin": "yarn clean && yarn prep:addresses:xinfin && mustache ./config/generatedAddresses.json subgraph.template.yaml > subgraph.yaml && yarn codegen && graph build",
+    "prep:xinfin:prod": "yarn clean && yarn prep:addresses:xinfin && mustache ./config/generatedAddresses.json subgraph.template.yaml > subgraph.yaml && yarn codegen && graph build",
     
     "watch-local": "graph deploy fathom/fathomswap --watch --debug --node http://127.0.0.1:8020/ --ipfs http://localhost:5001"
   },
